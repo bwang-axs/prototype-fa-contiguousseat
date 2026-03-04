@@ -447,27 +447,40 @@
       justify-content: center;
     }
 
+    /* Rich Tooltip – Figma 69:1816: surface/14, shadow, 4px radius, caret aligned above checkbox */
     .ticket-row .checkbox-locked-tooltip {
       position: absolute;
       left: 50%;
-      bottom: calc(100% + 8px);
+      bottom: calc(100% + 10px);
       transform: translateX(-50%);
-      background: var(--text-primary);
-      color: #fff;
+      background: var(--surface-14);
+      color: var(--text-primary);
       font-size: 12px;
-      line-height: 1.4;
+      line-height: 18px;
       padding: 8px 12px;
-      border-radius: 6px;
-      white-space: nowrap;
-      max-width: 260px;
-      white-space: normal;
-      text-align: center;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      border-radius: 4px;
+      max-width: 276px;
+      width: max-content;
+      text-align: left;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.16);
       pointer-events: none;
       opacity: 0;
       visibility: hidden;
       transition: opacity 0.15s, visibility 0.15s;
-      z-index: 10;
+      z-index: 9999;
+    }
+
+    .ticket-row .checkbox-locked-tooltip::after {
+      content: '';
+      position: absolute;
+      left: 50%;
+      bottom: -6px;
+      margin-left: -6px;
+      width: 0;
+      height: 0;
+      border-left: 6px solid transparent;
+      border-right: 6px solid transparent;
+      border-top: 6px solid var(--surface-14);
     }
 
     .ticket-row.checkbox-locked .checkbox-wrap:hover .checkbox-locked-tooltip {
