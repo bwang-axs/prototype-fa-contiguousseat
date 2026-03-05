@@ -438,6 +438,7 @@
     .ticket-row.checkbox-locked .checkbox {
       opacity: 0.5;
       cursor: not-allowed;
+      background-color: ;
     }
 
     .ticket-row .checkbox-wrap {
@@ -860,7 +861,7 @@
     }
 
     .variant-bar {
-      display: flex;
+      display: none; /* Hidden; original is default. Use ?variant=disabledcheckbox for locked-checkbox variant. */
       align-items: center;
       gap: 8px;
       padding: 8px 0 12px;
@@ -923,11 +924,11 @@
 
     <!-- Main content -->
     <main class="main">
-      <div class="variant-bar" id="variantBar">
+      <div class="variant-bar" id="variantBar" aria-hidden="true">
         <span>Prototype variant:</span>
-        <a href="?variant=original" id="linkOriginal">Original</a>
+        <a href="?" id="linkOriginal">Original</a>
         <span>|</span>
-        <a href="?" id="linkLocked">Locked checkboxes (prevent gap)</a>
+        <a href="?variant=disabledcheckbox" id="linkLocked">Locked checkboxes (prevent gap)</a>
       </div>
       <div class="breadcrumb">
         <a href="#">Sell</a>
@@ -961,7 +962,7 @@
         <div class="ticket-list">
           <div class="ticket-row" data-seat="401" data-section="RearOrch4" data-row="A">
             <div class="checkbox-wrap">
-              <span class="checkbox-locked-tooltip">Unselecting this checkbox would result in a gap between seats, please unselect adjacent seats first.</span>
+              <span class="checkbox-locked-tooltip">Seats are required to be listed next to each other.</span>
               <div class="checkbox" role="button" tabindex="0" aria-label="Select ticket" aria-pressed="false">
                 <span class="checkbox-icon checkbox-default" aria-hidden="true"><img src="bd502f2c114ac3bf822e09dc02cba59572c2adbc.svg" alt="" width="18" height="18"></span>
                 <span class="checkbox-icon checkbox-checked" aria-hidden="true"><img src="fd417f936169dabb037b4fe29c45ef776b4b26a9.svg" alt="" width="18" height="18"></span>
@@ -1198,7 +1199,7 @@
     // Adjacent-seat selection: users must select seats next to each other.
     (function() {
       var params = new URLSearchParams(window.location.search);
-      var useLockedCheckboxVariant = params.get('variant') !== 'original';
+      var useLockedCheckboxVariant = params.get('variant') === 'disabledcheckbox';
 
       var countEl = document.getElementById('selectedCount');
       var bannerEl = document.getElementById('infoBanner');
@@ -1207,9 +1208,11 @@
       var rows = Array.prototype.slice.call(document.querySelectorAll('.ticket-row'));
 
       if (useLockedCheckboxVariant) {
-        document.getElementById('linkLocked').classList.add('current');
+        var linkLocked = document.getElementById('linkLocked');
+        if (linkLocked) linkLocked.classList.add('current');
       } else {
-        document.getElementById('linkOriginal').classList.add('current');
+        var linkOriginal = document.getElementById('linkOriginal');
+        if (linkOriginal) linkOriginal.classList.add('current');
       }
 
       function getSeat(row) {

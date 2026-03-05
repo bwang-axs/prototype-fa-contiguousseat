@@ -860,7 +860,7 @@
     }
 
     .variant-bar {
-      display: flex;
+      display: none; /* Hidden; original is default. Use ?variant=disabledcheckbox for locked-checkbox variant. */
       align-items: center;
       gap: 8px;
       padding: 8px 0 12px;
@@ -923,11 +923,11 @@
 
     <!-- Main content -->
     <main class="main">
-      <div class="variant-bar" id="variantBar">
+      <div class="variant-bar" id="variantBar" aria-hidden="true">
         <span>Prototype variant:</span>
-        <a href="?variant=original" id="linkOriginal">Original</a>
+        <a href="?" id="linkOriginal">Original</a>
         <span>|</span>
-        <a href="?" id="linkLocked">Locked checkboxes (prevent gap)</a>
+        <a href="?variant=disabledcheckbox" id="linkLocked">Locked checkboxes (prevent gap)</a>
       </div>
       <div class="breadcrumb">
         <a href="#">Sell</a>
@@ -1198,7 +1198,7 @@
     // Adjacent-seat selection: users must select seats next to each other.
     (function() {
       var params = new URLSearchParams(window.location.search);
-      var useLockedCheckboxVariant = params.get('variant') !== 'original';
+      var useLockedCheckboxVariant = params.get('variant') === 'disabledcheckbox';
 
       var countEl = document.getElementById('selectedCount');
       var bannerEl = document.getElementById('infoBanner');
@@ -1207,9 +1207,11 @@
       var rows = Array.prototype.slice.call(document.querySelectorAll('.ticket-row'));
 
       if (useLockedCheckboxVariant) {
-        document.getElementById('linkLocked').classList.add('current');
+        var linkLocked = document.getElementById('linkLocked');
+        if (linkLocked) linkLocked.classList.add('current');
       } else {
-        document.getElementById('linkOriginal').classList.add('current');
+        var linkOriginal = document.getElementById('linkOriginal');
+        if (linkOriginal) linkOriginal.classList.add('current');
       }
 
       function getSeat(row) {
